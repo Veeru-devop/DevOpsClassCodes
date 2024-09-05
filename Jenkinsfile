@@ -2,53 +2,57 @@ pipeline {
     agent any
 
     tools {
-        // Install the Maven version configured as "M3" and add it to the path.
-        maven "mymaven"
+        // Install the Maven version configured as "mymaven" and add it to the path.
+        maven 'mymaven'
     }
 
     stages {
         stage('compile') {
             steps {
-                // Get some code from a GitHub repository
+                // Get code from a GitHub repository
                 git 'https://github.com/abbadiomer9/DevOpsClassCodes.git'
 
-                // Run Maven on a Unix agent.
-                sh "mvn compile"
-
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+                // Run Maven on a Unix agent
+                sh 'mvn compile'
             }
-
             post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
+                // If the stage is successful
                 success {
-                    echo 'compile is successfull'
+                    echo 'Compile is successful'
                 }
             }
         }
 
-        
-        stage('test'){
+        stage('test') {
             steps {
+                // Get code from a GitHub repository
                 git 'https://github.com/abbadiomer9/DevOpsClassCodes.git'
-                sh "mvn test"
+
+                // Run Maven tests
+                sh 'mvn test'
             }
             post {
-                Success {
-                    echo "test is successfull"
+                // If the stage is successful
+                success {
+                    echo 'Test is successful'
                 }
             }
         }
 
-        
-        stage('pakage-create'){
-        steps {
-            git 'https://github.com/abbadiomer9/DevOpsClassCodes.git'
-            sh "mvn pakage"
+        stage('package-create') {
+            steps {
+                // Get code from a GitHub repository
+                git 'https://github.com/abbadiomer9/DevOpsClassCodes.git'
+
+                // Run Maven package
+                sh 'mvn package'
+            }
+            post {
+                // If the stage is successful
+                success {
+                    echo 'Package creation is successful'
+                }
+            }
         }
-        post {
-            Success {
-                echo "test is successfull"
     }
 }
