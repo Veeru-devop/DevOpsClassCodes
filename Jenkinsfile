@@ -7,13 +7,13 @@ pipeline {
     }
 
     stages {
-        stage('checkout') {
+        stage('compile') {
             steps {
                 // Get some code from a GitHub repository
                 git 'https://github.com/abbadiomer9/DevOpsClassCodes.git'
 
                 // Run Maven on a Unix agent.
-                sh "mvn install"
+                sh "mvn compile"
 
                 // To run Maven on a Windows agent, use
                 // bat "mvn -Dmaven.test.failure.ignore=true clean package"
@@ -23,9 +23,32 @@ pipeline {
                 // If Maven was able to run the tests, even if some of the test
                 // failed, record the test results and archive the jar file.
                 success {
-                    echo 'it is successful'
+                    echo 'compile is successfull'
                 }
             }
         }
+
+        
+        stage('test'){
+            steps {
+                git 'https://github.com/abbadiomer9/DevOpsClassCodes.git'
+                sh "mvn test"
+            }
+            post {
+                Success {
+                    echo "test is successfull"
+                }
+            }
+        }
+
+        
+        stage('pakage-create'){
+        steps {
+            git 'https://github.com/abbadiomer9/DevOpsClassCodes.git'
+            sh "mvn pakage"
+        }
+        post {
+            Success {
+                echo "test is successfull"
     }
 }
